@@ -46,7 +46,7 @@ func CreateList(env *HandlerEnvironment) echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Request is invalid."})
 		}
 		env.Db.Create(&list)
-		return c.NoContent(http.StatusCreated)
+		return c.JSON(http.StatusCreated, map[string]uint{"id": list.ID})
 	}
 }
 

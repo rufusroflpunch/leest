@@ -1,7 +1,9 @@
 package lists
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -27,12 +29,25 @@ func GetListItems(env *HandlerEnvironment) echo.HandlerFunc {
 func UpdateListItem(env *HandlerEnvironment) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		var listItem, updatedListItem List
+		var listItem, updatedListItem ListItem
 		env.Db.First(&listItem, id)
 		if err := c.Bind(&updatedListItem); err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Request is invalid."})
 		}
 		env.Db.Model(&listItem).Update(updatedListItem)
+		fmt.Printf("%#v\n", updatedListItem)
+		return c.NoContent(http.StatusOK)
+	}
+}
+
+// ToggleListItemDone toggles the done value of a list item
+func ToggleListItemDone(env *HandlerEnvironment) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id, _ := strconv.Atoi(c.Param("id"))
+		var listItem ListItem
+		env.Db.First(&listItem, id)
+		listItem.Done = !listItem.Done
+		env.Db.Save(&listItem)
 		return c.NoContent(http.StatusOK)
 	}
 }

@@ -19,7 +19,7 @@ func main() {
 	db.AutoMigrate(&lists.Category{})
 
 	db.Create(&lists.Category{
-		Name: "General",
+		Name: "Personal",
 		Lists: []lists.List{
 			lists.List{
 				Name:     "A List",
@@ -39,4 +39,7 @@ func main() {
 			},
 		},
 	})
+	db.Create(&lists.Category{Name: "Work"})
+	db.Create(&lists.Category{Name: "Bucket Lists"})
+	db.Create(&lists.Category{Name: "Shopping"})
 }

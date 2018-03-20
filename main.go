@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/labstack/echo"
@@ -16,11 +18,15 @@ func main() {
 	defer db.Close()
 	setupDb(db)
 
-	env := &lists.HandlerEnvironment{Db: db.Set("gorm:auto_preload", true)}
+	// env := &lists.HandlerEnvironment{Db: db.Set("gorm:auto_preload", true)}
+	env := &lists.HandlerEnvironment{Db: db}
 	e := echo.New()
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.CORS())
+	e.Use(middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
+		fmt.Printf("%s\n", reqBody)
+	}))
 
 	api := e.Group("/api")
 
@@ -33,6 +39,7 @@ func main() {
 	// ListItems
 	api.GET("/list_items", lists.GetListItems(env))
 	api.PUT("/list_items/:id", lists.UpdateListItem(env))
+	api.PUT("/list_items/:id/toggle_done", lists.ToggleListItemDone(env))
 	api.POST("/list_items", lists.CreateListItem(env))
 	api.DELETE("/list_items/:id", lists.DeleteListItem(env))
 
