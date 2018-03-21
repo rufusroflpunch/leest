@@ -52,15 +52,15 @@ export default {
     },
     newCategory () {
       this.addingCategory = false
+      this.$options.categoryService.create({name: this.newCategoryName}).then(_ => this.retrieveData())
       this.newCategoryName = ''
-      this.$options.categoryService.create({name: newCategoryName})
     },
     cancelNewCategory () {
       this.addingCategory = false
       this.newCategoryName = ''
     },
     retrieveData () {
-      this.$options.categoryService.findAll().then(val => this.categories = val.data)
+      this.$options.categoryService.findAll().then(val => { this.categories = val.data })
     }
   },
   created () {

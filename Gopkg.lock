@@ -2,6 +2,21 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/GeertJohan/go.rice"
+  packages = [
+    ".",
+    "embedded"
+  ]
+  revision = "c02ca9a983da5807ddf7d796784928f5be4afd09"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/daaku/go.zipexe"
+  packages = ["."]
+  revision = "a5fe2436ffcb3236e175e5149162b41cd28bd27d"
+
+[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
@@ -21,6 +36,12 @@
   name = "github.com/jinzhu/inflection"
   packages = ["."]
   revision = "04140366298a54a039076d798123ffa108fff46c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/kardianos/osext"
+  packages = ["."]
+  revision = "ae77be60afb1dcacde03767a8c37337fad28ac14"
 
 [[projects]]
   name = "github.com/labstack/echo"
@@ -90,6 +111,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "b298c8188347d036ef78f825a339b80621f800597dbac5fb7ccd31e47da5f0f4"
+  inputs-digest = "56e5a1e4d87bea8e96f7b46d045052f9bd5f3acb589175ee57fcb9f22535da89"
   solver-name = "gps-cdcl"
   solver-version = 1

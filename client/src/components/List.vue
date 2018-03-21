@@ -2,7 +2,7 @@
   <div class="list" v-if="list.id">
     <h1>{{ list.name }}</h1>
     <button class="primary" @click.prevent="newItem">+ Add Item</button>
-    <h2>Incomplete</h2>
+    <h2 v-if="incompleteItems.length > 0">Incomplete</h2>
     <transition-group name="pop">
       <div v-for="item in incompleteItems" :key="item.id" class="item-list">
         <VCheckbox v-model="item.done" @input="completeItem(item.id)" />
@@ -31,7 +31,7 @@
              @keydown.enter.prevent="saveNew"
              @blur.prevent="cancelNew">
     </div>
-    <h2>Complete</h2>
+    <h2 v-if="completeItems.length > 0">Complete</h2>
     <transition-group name="pop">
       <div v-for="item in completeItems" :key="item.id" class="item-list">
         <VCheckbox v-model="item.done" @input="completeItem(item.id)" />

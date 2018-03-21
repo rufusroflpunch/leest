@@ -1,3 +1,6 @@
 vendor/
 client/node_modules/
 lists.db
+rice-box.go
+public/
+main

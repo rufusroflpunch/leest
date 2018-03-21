@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/rufusroflpunch/wicky/lists"
+	"github.com/rufusroflpunch/leest/lists"
 )
 
 func main() {
@@ -18,15 +20,19 @@ func main() {
 	defer db.Close()
 	setupDb(db)
 
-	// env := &lists.HandlerEnvironment{Db: db.Set("gorm:auto_preload", true)}
 	env := &lists.HandlerEnvironment{Db: db}
 	e := echo.New()
+
+	assetHandler := http.FileServer(rice.MustFindBox("public").HTTPBox())
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.CORS())
 	e.Use(middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
 		fmt.Printf("%s\n", reqBody)
 	}))
+
+	e.GET("/*", echo.WrapHandler(assetHandler))
+	// e.GET("/*", echo.WrapHandler(assetHandler))
 
 	api := e.Group("/api")
 
@@ -49,7 +55,7 @@ func main() {
 	api.POST("/categories", lists.CreateCategory(env))
 	api.DELETE("/categories/:id", lists.DeleteCategory(env))
 
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":7000"))
 }
 
 func setupDb(db *gorm.DB) {

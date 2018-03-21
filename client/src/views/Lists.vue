@@ -2,18 +2,19 @@
   <div class="home">
     <div class="row">
       <div class="category col-sm-12">
-        <Categories :categories="categories" v-model="currentCategory" />
+        <Categories class="categories" :categories="categories" v-model="currentCategory" />
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12 col-md-4">
+      <div class="col-sm-12 col-md-4 col-lg-3">
         <CategoriesNav :lists="categoryLists"
+                       class="lists"
                        @createList="createList"
                        @deleteList="deleteList"
                        @selectList="selectList" />
       </div>
-      <div class="middle-spacer hidden-sm"></div>
-      <div class="col-sm-12 col-md">
+      <div class="middle-spacer"></div>
+      <div class="col-sm-12 col-md col-lg-4">
         <List :list="currentList"
               :listItems="currentListItems"
               @saveListItem="saveListItem"
@@ -21,6 +22,7 @@
               @toggleDone="toggleDone"
               @deleteListItem="deleteListItem" />
       </div>
+      <div class="middle-spacer"></div>
     </div>
     <div class="row hidden-md bottom-spacer"></div>
   </div>
@@ -47,13 +49,13 @@ export default {
       currentListItems: [{}],
       categories: [{initial: true}],
       lists: [{}],
-      listItems: [{}],
+      listItems: [{}]
     }
   },
   computed: {
     categoryLists () {
       return this.lists.filter(l => l.category_id === this.currentCategory.id)
-    },
+    }
   },
   methods: {
     async retrieveData () {
@@ -74,7 +76,7 @@ export default {
       this.listItems = resp.data
     },
     async createList (newListName) {
-      let resp = await this.$options.listService.create(newListName, this.currentCategory.id)
+      await this.$options.listService.create(newListName, this.currentCategory.id)
       this.retrieveData()
     },
     async deleteList (id) {
@@ -135,5 +137,9 @@ export default {
 
 .middle-spacer {
   width: 2rem;
+}
+
+.lists {
+  margin-top: 1rem;
 }
 </style>
