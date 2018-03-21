@@ -16,4 +16,8 @@ export default class {
   toggleDone (id) {
     return Axios.put(`/api/list_items/${id}/toggle_done`)
   }
+
+  delete (id) {
+    return Axios.delete(`/api/list_items/${id}`)
+  }
 }

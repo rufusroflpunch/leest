@@ -53,7 +53,7 @@ export default {
 
 <style lang="scss" scoped>
 .nav {
-  width: 80%;
+  // width: 80%;
 }
 
 .new-item {

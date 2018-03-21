@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Lists from './views/Lists.vue'
+import Lists from './views/Lists'
+import Settings from './views/Settings'
 
 Vue.use(Router)
 
@@ -12,9 +13,9 @@ export default new Router({
       component: Lists
     },
     {
-      path: '/lists/:id',
-      name: 'list',
-      component: Lists
+      path: '/settings',
+      name: 'settings',
+      component: Settings
     }
   ]
 })

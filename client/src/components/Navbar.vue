@@ -1,6 +1,6 @@
 <template>
   <header>
-    <router-link to="/" class="logo">Listy</router-link>
+    <router-link to="/" class="logo">Leest</router-link>
     <router-link to="/" class="button">Lists</router-link>
     <router-link to="/settings" class="button">Settings</router-link>
   </header>

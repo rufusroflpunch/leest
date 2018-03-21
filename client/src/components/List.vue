@@ -1,20 +1,26 @@
 <template>
-  <div class="list">
+  <div class="list" v-if="list.id">
+    <h1>{{ list.name }}</h1>
     <button class="primary" @click.prevent="newItem">+ Add Item</button>
-    <div v-for="item in listItems" :key="item.id" class="item-list">
-      <VCheckbox v-model="item.done" @input="completeItem(item.id)" />
-      <div class="item shadow-small"
-           v-show="editItem !== item.id"
-           @click.prevent="startEdit(item)"
-           :id="`item_${item.id}`">{{ item.description }}</div>
-      <input class="edit-item"
-             v-show="editItem === item.id"
-             :value="item.description"
-             @keydown.esc.prevent="cancelEdit(item)"
-             @keydown.enter.prevent="saveEdit(item.id)"
-             @blur.prevent="cancelEdit(item)"
-             :id="`editItem${item.id}`">
-    </div>
+    <h2>Incomplete</h2>
+    <transition-group name="pop">
+      <div v-for="item in incompleteItems" :key="item.id" class="item-list">
+        <VCheckbox v-model="item.done" @input="completeItem(item.id)" />
+        <div class="item shadow-small"
+            v-show="editItem !== item.id"
+            @click.prevent="startEdit(item)"
+            :id="`item_${item.id}`">{{ item.description }}</div>
+        <input class="edit-item"
+              v-show="editItem === item.id"
+              :value="item.description"
+              @keydown.esc.prevent="cancelEdit(item)"
+              @keydown.enter.prevent="saveEdit(item.id)"
+              @blur.prevent="cancelEdit(item)"
+              :id="`editItem${item.id}`">
+        <div class="delete-button"
+             @click.prevent="deleteItem(item)">&times;</div>
+      </div>
+    </transition-group>
     <div>
       <input type="text"
              id="new-item"
@@ -25,6 +31,17 @@
              @keydown.enter.prevent="saveNew"
              @blur.prevent="cancelNew">
     </div>
+    <h2>Complete</h2>
+    <transition-group name="pop">
+      <div v-for="item in completeItems" :key="item.id" class="item-list">
+        <VCheckbox v-model="item.done" @input="completeItem(item.id)" />
+        <div class="item shadow-small"
+            :id="`item_${item.id}`"
+            :class="{'done': item.done}">{{ item.description }}</div>
+        <div class="delete-button"
+             @click.prevent="deleteItem(item)">&times;</div>
+      </div>
+    </transition-group>
   </div>
 </template>
 
@@ -49,7 +66,6 @@ export default {
     },
     cancelEdit (item) {
       item.description = this.preEdit
-      this.preEdit = ''
       this.editItem = -1
     },
     saveEdit (id) {
@@ -75,6 +91,17 @@ export default {
     },
     completeItem (id) {
       this.$emit('toggleDone', id)
+    },
+    deleteItem (item) {
+      this.$emit('deleteListItem', item.id)
+    }
+  },
+  computed: {
+    incompleteItems () {
+      return this.listItems.filter(li => !li.done)
+    },
+    completeItems () {
+      return this.listItems.filter(li => li.done)
     }
   },
   props: {
@@ -120,5 +147,41 @@ export default {
 
 .item, .edit-item {
   flex-grow: 1;
+}
+
+.item.done {
+  text-decoration: line-through;
+  color: rgba(#2e3440, 0.4);
+}
+
+.pop-enter-active {
+  animation: pop 0.2s;
+}
+
+.pop-leave-active {
+  animation: pop 0.2s reverse;
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    max-height: 0rem;
+  }
+  100% {
+    opacity: 1;
+    max-height: 5rem;
+  }
+}
+
+.delete-button {
+  font-size: 1.5rem;
+  color: rgb(131, 0, 0);
+  text-decoration: none;
+  font-size: 2rem;
+}
+
+.delete-button:hover {
+  color: rgb(200, 0, 0);
+  cursor: pointer;
 }
 </style>

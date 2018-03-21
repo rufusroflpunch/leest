@@ -6,20 +6,23 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6 col-md-4">
+      <div class="col-sm-12 col-md-4">
         <CategoriesNav :lists="categoryLists"
                        @createList="createList"
                        @deleteList="deleteList"
                        @selectList="selectList" />
       </div>
-      <div class="col-sm-4">
+      <div class="middle-spacer hidden-sm"></div>
+      <div class="col-sm-12 col-md">
         <List :list="currentList"
               :listItems="currentListItems"
               @saveListItem="saveListItem"
               @createNewItem="createNewItem"
-              @toggleDone="toggleDone" />
+              @toggleDone="toggleDone"
+              @deleteListItem="deleteListItem" />
       </div>
     </div>
+    <div class="row hidden-md bottom-spacer"></div>
   </div>
 </template>
 
@@ -98,6 +101,11 @@ export default {
       await this.$options.listItemService.toggleDone(id)
       await this.retrieveData()
       this.selectList(this.currentListId)
+    },
+    async deleteListItem (id) {
+      await this.$options.listItemService.delete(id)
+      await this.retrieveData()
+      this.selectList(this.currentListId)
     }
   },
   mounted () {
@@ -121,4 +129,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bottom-spacer {
+  height: 5rem;
+}
+
+.middle-spacer {
+  width: 2rem;
+}
 </style>

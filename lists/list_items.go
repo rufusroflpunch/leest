@@ -1,7 +1,6 @@
 package lists
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -35,7 +34,6 @@ func UpdateListItem(env *HandlerEnvironment) echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Request is invalid."})
 		}
 		env.Db.Model(&listItem).Update(updatedListItem)
-		fmt.Printf("%#v\n", updatedListItem)
 		return c.NoContent(http.StatusOK)
 	}
 }
