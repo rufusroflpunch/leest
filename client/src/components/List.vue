@@ -3,6 +3,16 @@
     <h1>{{ list.name }}</h1>
     <button class="primary" @click.prevent="newItem">+ Add Item</button>
     <h2 v-if="incompleteItems.length > 0">Incomplete</h2>
+    <div>
+      <input type="text"
+             id="new-item"
+             class="edit-item"
+             v-show="addItem"
+             v-model="addItemText"
+             @keydown.esc.prevent="cancelNew"
+             @keydown.enter.prevent="saveNew"
+             @blur.prevent="cancelNew">
+    </div>
     <transition-group name="pop">
       <div v-for="item in incompleteItems" :key="item.id" class="item-list">
         <VCheckbox v-model="item.done" @input="completeItem(item.id)" />
@@ -21,16 +31,6 @@
              @click.prevent="deleteItem(item)">&times;</div>
       </div>
     </transition-group>
-    <div>
-      <input type="text"
-             id="new-item"
-             class="edit-item"
-             v-show="addItem"
-             v-model="addItemText"
-             @keydown.esc.prevent="cancelNew"
-             @keydown.enter.prevent="saveNew"
-             @blur.prevent="cancelNew">
-    </div>
     <h2 v-if="completeItems.length > 0">Complete</h2>
     <transition-group name="pop">
       <div v-for="item in completeItems" :key="item.id" class="item-list">

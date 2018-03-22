@@ -12,10 +12,6 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="category in categories" :key="category.id">
-          <td data-label="Name">{{ category.name }}</td>
-          <td><a href="" @click.prevent="deleteCategory(category.id)">Delete</a></td>
-        </tr>
         <tr v-if="addingCategory">
           <td colspan="2">
             <input type="text"
@@ -25,6 +21,10 @@
                    @blur.prevent="cancelNewCategory"
                    id="new-category">
           </td>
+        </tr>
+        <tr v-for="category in categories" :key="category.id">
+          <td data-label="Name">{{ category.name }}</td>
+          <td><a href="" @click.prevent="deleteCategory(category.id)">Delete</a></td>
         </tr>
       </tbody>
     </table>

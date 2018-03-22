@@ -4,18 +4,19 @@
       <a href="" @click.prevent="$emit('hideListNav')"><icon name="arrow-left" scale="2" class="hidden-md hidden-lg back-button" /></a>
       <h3 class="header">Lists</h3>
       <button class="primary add-list-button" @click.prevent="addList">+ Add List</button>
+      <div v-show="newList">
+        <input id="newList"
+              type="text"
+              class="new-item"
+              v-model="newListName"
+              @keydown.esc.prevent="newList = false"
+              @keydown.enter.prevent="createList">
+      </div>
       <div v-for="list in lists" :key="list.id">
         <a href="" class="close-button" @click.prevent="$emit('deleteList', list.id)">&times;</a>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <a href="#" @click.prevent="selectList(list.id)">{{ list.name }}</a>
       </div>
-      <input id="newList"
-             type="text"
-             class="new-item"
-             v-model="newListName"
-             v-show="newList"
-             @keydown.esc.prevent="newList = false"
-             @keydown.enter.prevent="createList">
     </nav>
   </div>
 </template>
