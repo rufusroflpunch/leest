@@ -1,19 +1,12 @@
 <template>
   <div class="categories-nav">
     <nav class="nav">
-      <button class="primary" @click.prevent="addList">+ Add List</button>
-      <div v-for="list in lists" :key="list.id">
-        <a href="" class="close-button" @click.prevent="$emit('deleteList', list.id)">&times;</a>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="#" @click.prevent="selectList(list.id)">{{ list.name }}</a>
+      <h3 class="header">Categories</h3>
+      <div v-for="category in categories" :key="category.id">
+        <a href="#"
+           @click.prevent="selectCategory(category.id)"
+           :class="{'selected': currentCategory.id === category.id}">{{ category.name }}</a>
       </div>
-      <input id="newList"
-             type="text"
-             class="new-item"
-             v-model="newListName"
-             v-show="newList"
-             @keydown.esc.prevent="newList = false"
-             @keydown.enter.prevent="createList">
     </nav>
   </div>
 </template>
@@ -23,44 +16,29 @@ export default {
   name: 'CategoriesNav',
   data () {
     return {
-      newListName: '',
-      newList: false
+      newCategoryName: '',
+      newCategory: false
     }
   },
   methods: {
-    addList () {
-      this.newList = true
-      this.newListName = ''
-      this.$nextTick(_ => document.getElementById('newList').focus())
-    },
-    createList () {
-      this.$emit('createList', this.newListName)
-      this.newList = false
-      this.newListName = ''
-    },
-    selectList (id) {
-      this.$emit('selectList', id)
+    selectCategory (id) {
+      this.$emit('selectCategory', id)
     }
   },
   props: {
-    lists: {
+    categories: {
       type: Array,
       default: _ => []
+    },
+    currentCategory: {
+      type: Object,
+      default: _ => {}
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.nav {
-  // width: 80%;
-}
-
-.new-item {
-  border: none;
-  background-color: #ECEFF4;
-}
-
 .nav {
   a {
     display: inline;
@@ -70,5 +48,15 @@ export default {
     font-size: 1.5rem;
     color: rgb(131, 0, 0);
   }
+}
+
+.header {
+  margin-left: 0;
+}
+
+.selected {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: darkslategrey;
 }
 </style>

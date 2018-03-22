@@ -1,20 +1,22 @@
 <template>
-  <div class="home">
-    <div class="row">
-      <div class="category col-sm-12">
-        <Categories class="categories" :categories="categories" v-model="currentCategory" />
-      </div>
-    </div>
+  <div class="home container">
     <div class="row">
       <div class="col-sm-12 col-md-4 col-lg-3">
-        <CategoriesNav :lists="categoryLists"
-                       class="lists"
-                       @createList="createList"
-                       @deleteList="deleteList"
-                       @selectList="selectList" />
+        <CategoriesNav :categories="categories"
+                       class="nav"
+                       :class="{'hidden-sm': categorySelected, 'animate': !categorySelected}"
+                       :currentCategory="currentCategory"
+                       @selectCategory="selectCategory"/>
+        <ListNav :lists="categoryLists"
+                 class="nav"
+                 @createList="createList"
+                 @deleteList="deleteList"
+                 @selectList="selectList"
+                 @hideListNav="hideListNav"
+                 :class="{'animate': categorySelected, 'hidden-sm': !categorySelected}" />
       </div>
-      <div class="middle-spacer"></div>
-      <div class="col-sm-12 col-md col-lg-4">
+      <div class="middle-spacer hidden-sm"></div>
+      <div class="col-sm">
         <List :list="currentList"
               :listItems="currentListItems"
               @saveListItem="saveListItem"
@@ -22,15 +24,14 @@
               @toggleDone="toggleDone"
               @deleteListItem="deleteListItem" />
       </div>
-      <div class="middle-spacer"></div>
     </div>
-    <div class="row hidden-md bottom-spacer"></div>
   </div>
 </template>
 
 <script>
 import Categories from '@/components/Categories'
 import List from '@/components/List'
+import ListNav from '@/components/ListNav'
 import CategoriesNav from '@/components/CategoriesNav'
 import CategoryService from '@/services/Category'
 import ListService from '@/services/List'
@@ -49,12 +50,19 @@ export default {
       currentListItems: [{}],
       categories: [{initial: true}],
       lists: [{}],
-      listItems: [{}]
+      listItems: [{}],
+      categorySelected: false
     }
   },
   computed: {
     categoryLists () {
       return this.lists.filter(l => l.category_id === this.currentCategory.id)
+    },
+    hideLists () {
+      return this.currentCategory === {}
+    },
+    hideCategories () {
+      return !this.hideLists
     }
   },
   methods: {
@@ -80,6 +88,7 @@ export default {
       this.retrieveData()
     },
     async deleteList (id) {
+      if (!confirm('Are you sure want to delete this list?')) { return }
       await this.$options.listService.delete(id)
       this.retrieveData()
       this.$router.push({name: 'lists'})
@@ -108,6 +117,14 @@ export default {
       await this.$options.listItemService.delete(id)
       await this.retrieveData()
       this.selectList(this.currentListId)
+    },
+    hideListNav () {
+      this.categorySelected = false
+      this.currentCategory = {}
+    },
+    selectCategory (id) {
+      this.currentCategory = this.categories.filter(cat => cat.id === id)[0]
+      this.categorySelected = true
     }
   },
   mounted () {
@@ -125,6 +142,7 @@ export default {
   components: {
     Categories,
     List,
+    ListNav,
     CategoriesNav
   }
 }
@@ -139,7 +157,23 @@ export default {
   width: 2rem;
 }
 
-.lists {
+.nav {
   margin-top: 1rem;
+}
+
+.animate {
+  @media screen and (max-width: 768px){
+    animation: opaque 0.3s linear;
+  }
+}
+
+@keyframes opaque {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 </style>

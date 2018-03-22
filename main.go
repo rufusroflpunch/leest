@@ -32,7 +32,6 @@ func main() {
 	}))
 
 	e.GET("/*", echo.WrapHandler(assetHandler))
-	// e.GET("/*", echo.WrapHandler(assetHandler))
 
 	api := e.Group("/api")
 
@@ -55,7 +54,7 @@ func main() {
 	api.POST("/categories", lists.CreateCategory(env))
 	api.DELETE("/categories/:id", lists.DeleteCategory(env))
 
-	e.Logger.Fatal(e.Start(":7000"))
+	e.Logger.Fatal(e.Start("localhost:7000"))
 }
 
 func setupDb(db *gorm.DB) {

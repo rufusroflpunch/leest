@@ -6,7 +6,7 @@
       <router-view></router-view>
     </div>
 
-    <footer>
+    <footer class="hidden-sm">
       <p>&copy; 2017 Ryan Breen | <a href="mailto:ryan@breen.xyz">Contact</a></p>
     </footer>
   </div>

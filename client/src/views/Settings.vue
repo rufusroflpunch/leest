@@ -1,6 +1,8 @@
 <template>
   <div class="settings">
     <h1>Settings</h1>
+    <button class="primary hidden-md hidden-lg add-category"
+            @click.prevent="addNewCategory">+ Add Category</button>
     <table class="table">
       <thead>
         <tr>
@@ -11,11 +13,11 @@
       </thead>
       <tbody>
         <tr v-for="category in categories" :key="category.id">
-          <td>{{ category.name }}</td>
+          <td data-label="Name">{{ category.name }}</td>
           <td><a href="" @click.prevent="deleteCategory(category.id)">Delete</a></td>
         </tr>
-        <tr>
-          <td colspan="2" v-if="addingCategory">
+        <tr v-if="addingCategory">
+          <td colspan="2">
             <input type="text"
                    v-model="newCategoryName"
                    @keydown.enter.prevent="newCategory"
@@ -44,6 +46,7 @@ export default {
   },
   methods: {
     deleteCategory (id) {
+      if (!confirm('Are you sure you want to delete the category?')) { return }
       this.$options.categoryService.delete(id).then(_ => this.retrieveData())
     },
     addNewCategory () {
@@ -77,5 +80,9 @@ export default {
   th {
     text-align: left;
   }
+}
+
+.add-category {
+  margin-left: 1rem;
 }
 </style>
